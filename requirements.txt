@@ -40,6 +40,7 @@ Pillow==9.2.0
 protobuf==3.19.4
 pyasn1==0.4.8
 pyasn1-modules==0.2.8
+pydot @ file:///C:/ci_310/pydot_1642088371388/work
 pyparsing==3.0.9
 PySocks==1.7.1
 python-dateutil==2.8.2
