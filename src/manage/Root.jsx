@@ -1,7 +1,9 @@
 import React from 'react'
 
-export default function Root() {
-  return (
+function Root() {
+  return (  
     <div>Root</div>
-  )
+  );
 }
+
+export default Root;
