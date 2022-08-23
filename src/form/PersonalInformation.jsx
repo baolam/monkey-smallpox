@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react'
-import { convinces, objs } from './vietgeo';
-import getQhx from './getQhx';
+import { convinces, objs } from '../utils/vietgeo';
+import getQhx from '../utils/getQhx';
 
 import {  
   MenuItem,
@@ -28,6 +28,7 @@ function PersonalInformation(props) {
               value={convince}
               onChange={(vl) => {
                 setConvinceId(vl.target.value);
+                props.callback(convince, "");
                 setQhxIndex("");
               }}
               label="Tỉnh / Thành phố"
@@ -45,7 +46,10 @@ function PersonalInformation(props) {
               ref={anotherAddrRef}
               value={qhx_index}
               label="Quận/Huyện/Xã"
-              onChange={(e) => setQhxIndex(e.target.value)}
+              onChange={(e) => {
+                props.callback(convince, e.target.value);
+                setQhxIndex(e.target.value);
+              }}
             >
               {objs[getQhx(convince)].map((o, idx) => <MenuItem key={idx} value={o}>{o}</MenuItem>)}
             </Select>

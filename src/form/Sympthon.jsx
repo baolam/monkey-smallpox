@@ -46,6 +46,7 @@ class SympthonForm extends Component {
 
     this.sympthons = props.sympthons;
     this.modifyFine = this.modifyFine.bind(this);
+    this.callback = props.callback;
   }
   
   render() {
@@ -63,6 +64,7 @@ class SympthonForm extends Component {
   modifyFine(index, vl) {
     let fines = this.state.sympthons;
     fines[index] = vl;
+    this.callback(fines);
     this.setState(fines);
   }
 }
