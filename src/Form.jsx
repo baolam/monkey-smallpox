@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { useRef, useState, useEffect } from 'react'
 
 import ElementForm from './utils/ElementForm';
 import SympthonForm from './form/Sympthon';
@@ -24,7 +24,7 @@ function TfTime(data) {
 } 
 
 function Form(props) {
-  let { disabled } = props;
+  let { disabled, form } = props;
   
   if (disabled === undefined)
     disabled = false;
@@ -68,14 +68,25 @@ function Form(props) {
       email : phoneRef.current.value
     }
     console.log(dt);
-  }
+  } 
+
+  useEffect(() => {
+    if (disabled) {
+      // Tiến hành load dữ liệu vào form
+      console.log(form);
+    }
+  }, []);
 
   return (
     <div>
-      <Typography style={{ textAlign : "center", background : "blue", color : "orange" }} 
-        sx={{ m : 1 }} variant="h2" 
-        component="h2">
-        Đơn khai báo y tế</Typography>
+      {! disabled && 
+        <Typography 
+          style={{ textAlign : "center", background : "blue", color : "orange" }} 
+          sx={{ m : 1 }} variant="h2" 
+          component="h2">
+          Đơn khai báo y tế
+        </Typography>
+      }
       <Grid container style={{ overflow : "hidden" }} spacing={1}>
         <Grid xs={6}>
           <Typography style={{ textAlign : "center" }} className="margin-title" variant="h4" component="h4">Thông tin cá nhân</Typography>
