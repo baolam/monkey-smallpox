@@ -7,11 +7,15 @@ import {
 } from '@mui/material';
 
 const Unit = (prop) => {
-  let { rst, index, onChange } = prop;
-  
+  let { rst, index, onChange, disabled } = prop;
+
+  if (disabled === undefined)
+    disabled = false;
+
   return (
     <FormControl fullWidth sx={{ m : 1 }}>
       <TextField
+        disabled={disabled}
         variant='outlined'
         label={prop.sympthon}
         select
@@ -45,19 +49,30 @@ class SympthonForm extends Component {
     };
 
     this.sympthons = props.sympthons;
+    this.fill = props.fill;
+
     this.modifyFine = this.modifyFine.bind(this);
     this.callback = props.callback;
   }
   
   render() {
-    let { sympthons } = this;
+    let { sympthons, fill } = this;
     
     return (
-      <div>
-        {sympthons.map((sympthon, idx) => <Unit key={idx} sympthon={sympthon} 
-          rst={this.state.sympthons[idx]} onChange={this.modifyFine} index={idx} />)
-        }
-      </div>
+      <>
+        {(() => {
+          if (fill === undefined || fill.length === 0) 
+          {
+            return sympthons.map((sympthon, idx) => <Unit key={idx} sympthon={sympthon} 
+              rst={this.state.sympthons[idx]} disabled={fill === undefined ? true : false} 
+              onChange={this.modifyFine} 
+              index={idx} 
+            />)
+          }
+          return fill.map((sympthon, idx) => <Unit key={idx} sympthon={sympthons[idx]} 
+            rst={sympthon} disabled onChange={this.modifyFine} index={idx} />)
+        })()}
+      </>
     )
   }
 

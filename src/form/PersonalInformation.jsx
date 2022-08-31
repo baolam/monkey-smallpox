@@ -11,11 +11,19 @@ import {
 } from '@mui/material';
 
 function PersonalInformation(props) {
-  let [ convince, setConvinceId ] = useState('');
-  let [ qhx_index, setQhxIndex ] = useState("");
-
-  let anotherAddrRef = useRef();
+  function value(obj) {
+    return obj !== undefined ? obj : "";
+  }
   
+  let [ convince, setConvinceId ] = useState(
+    value(props.convince)
+  );
+  let [ qhx_index, setQhxIndex ] = useState(
+    value(props.qhx)
+  );
+  
+  let anotherAddrRef = useRef();
+
   return (
     <FormControl fullWidth sx={{ m : 1 }}>
       <Grid container>

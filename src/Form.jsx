@@ -23,11 +23,26 @@ function TfTime(data) {
   </Grid>
 } 
 
+let one_time = false;
 function Form(props) {
   let { disabled, form } = props;
-  
-  if (disabled === undefined)
+  let fill_sympthons = [];
+  let convince = "", qhx = "";
+  let date = new Date();
+  let hour = date.getHours();
+  let minute = date.getMinutes();
+  let second = date.getSeconds();
+
+  if (disabled === undefined) {
     disabled = false;
+  } else {
+    fill_sympthons = form.sympthons;
+    convince = form.convince;
+    qhx = form.qhx;
+    hour = form.hour;
+    minute = form.minute;
+    second = form.second;
+  }
   
   let addrRef = useRef();
   let fullnameRef = useRef();
@@ -36,14 +51,11 @@ function Form(props) {
   let emailRef = useRef();
 
   let sympthons = [];
-  let convince = "";
-  let qhx = "";
 
-  let date = new Date();
   let [ dt_form, __ ] = useState({
-    hour : date.getHours(),
-    minute : date.getMinutes(),
-    second : date.getSeconds()
+    hour,
+    minute,
+    second
   });
 
   function callbackChangeSymthon(vl) {
@@ -65,20 +77,44 @@ function Form(props) {
       fullname : fullnameRef.current.value,
       citizen : citizenRef.current.value,
       phone : phoneRef.current.value,
-      email : phoneRef.current.value
+      email : emailRef.current.value,
+      year : date.getFullYear(),
+      month : date.getMonth(),
+      day : date.getDate()
     }
     console.log(dt);
   } 
 
   useEffect(() => {
-    if (disabled) {
+    if (Object.keys(form).length === 0)
+      return;
+    if (disabled && ! one_time) {
       // Tiến hành load dữ liệu vào form
-      console.log(form);
+      let { 
+        address,
+        fullname,
+        citizen,
+        phone,
+        email 
+      } = form;
+
+      // Xét giá trị
+      function set(target, value) {
+        target.current.value = value;
+      }
+
+      set(addrRef, address);
+      set(fullnameRef, fullname);
+      set(citizenRef, citizen);
+      set(phoneRef, phone);
+      set(emailRef, email);
+
+      one_time = true;
     }
   }, []);
 
   return (
-    <div>
+    <>
       {! disabled && 
         <Typography 
           style={{ textAlign : "center", background : "blue", color : "orange" }} 
@@ -97,7 +133,11 @@ function Form(props) {
               <TfTime value={dt_form.second} label="Giây" />
             </Grid>
           </FormControl>
-          <PersonalInformation disabled={disabled} callback={callbackChangeQHX} />
+          <PersonalInformation 
+            convince={convince}
+            qhx={qhx}
+            disabled={disabled} 
+            callback={callbackChangeQHX} />
           <ElementForm id="address" name="Địa chỉ nhà" reference={addrRef} disabled={disabled} />
           <ElementForm id="full-name" name="Họ và tên" reference={fullnameRef} disabled={disabled} />
           <ElementForm id="cccd" name="Căn cước công dân" reference={citizenRef} disabled={disabled} />
@@ -108,16 +148,17 @@ function Form(props) {
           {/* Xây dựng các triệu chứng */}
           <Typography style={{ textAlign : "center" }} className="margin-title" conponent="h4" variant="h4">Các triệu chứng</Typography>
           <SympthonForm 
-            disabled={disabled} 
+            disabled={disabled}
+            fill={fill_sympthons} 
             sympthons={["Sốt", "Phát ban", "Đau đầu", "Mệt mỏi", "Đau cơ", "Các triệu chứng khác"]}
             callback={callbackChangeSymthon} 
           />
         </Grid>
       </Grid>
-      <FormControl fullWidth sx={{ m : 1 }}>
+      {! disabled && <FormControl fullWidth sx={{ m : 1 }}>
         <Button variant="contained" onClick={sendForm}>Gửi đơn</Button>
-      </FormControl>
-    </div>
+      </FormControl>}
+    </>
   )
 }
 
